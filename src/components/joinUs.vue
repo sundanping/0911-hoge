@@ -16,6 +16,25 @@
   <section class="join-us" >
     <div :style="backgroundIndent" class="joinUs-title">加入我们</div>
     <hr>
+    <div style="font-size: .2rem">
+    <yd-accordion >
+      <yd-accordion-item title="李白"  style="text-align: left;">
+        <div style="padding: .24rem;">
+          李白（701年－762年），字太白，号青莲居士，又号“谪仙人”，是唐代伟大的浪漫主义诗人，被后人誉为“诗仙”，与杜甫并称为“李杜”，为了与另两位诗人李商隐与杜牧即“小李杜”区别，杜甫与李白又合称“大李杜”。其人爽朗大方，爱饮酒作诗，喜交友。
+        </div>
+      </yd-accordion-item>
+      <yd-accordion-item @click.native="ajax()"  title="杜甫">
+        <div style="padding: .24rem;">
+          杜甫（712年—770年），字子美，汉族，<p >本襄阳人</p>，后徙河南巩县。自号少陵野老，唐代伟大的现实主义诗人，与李白合称“李杜”。为了与另两位诗人李商隐与杜牧即“小李杜”区别，杜甫与李白又合称“大李杜”，杜甫也常被称为“老杜”。
+        </div>
+      </yd-accordion-item>
+      <yd-accordion-item v-show="as" title="王维" :class="as?'animation_opactiy_once': ''">
+        <div style="padding: .24rem;">
+          王维（701年－761年，一说699年—761年），河东蒲州（今山西运城）人，祖籍山西祁县。唐朝著名诗人、画家，字摩诘，号摩诘居士。
+        </div>
+      </yd-accordion-item>
+    </yd-accordion>
+    </div>
   </section>
 </div>
 </template>
@@ -24,6 +43,7 @@
     name: 'customer',
     data () {
       return {
+        as: true,
         background: {
           backgroundImage: 'url(' + require('../assets/images/joinUs/1_01.jpg') + ')',
           backgroundSize: '100% 100%'
@@ -49,6 +69,7 @@
     },
     methods: {
       ajax () {
+        this.as = !this.as
         console.log('methods')
       }
     }

@@ -109,3 +109,13 @@ html,body{
 .animation_opactiy{
     animation: backOpacity 2s ease-in-out infinite;
 }
+@keyframes backOpacity2{
+  0%   { opacity: 1 }
+  25%  { opacity: .5 }
+  75%  { opacity: .8 }
+  100% { opacity: 1 }
+}
+
+.animation_opactiy_once{
+  animation: backOpacity2 2s ease-in-out 1;
+}
