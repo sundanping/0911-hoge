@@ -54,4 +54,16 @@ a:hover { text-decoration: none; }
 .col-10 {width: 83.33%;}
 .col-11 {width: 91.66%;}
 .col-12 {width: 100%;}
+.font-24{
+  font-size: .24rem;
+}
+.font-28{
+  font-size: .28rem;
+}
+.color-999{
+  color: #999;
+}
+.bold{
+  font-weight: bold;
+}
 /* 通用样式 */

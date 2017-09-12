@@ -1,49 +1,71 @@
 <template>
-<div>
-  <header align="center" >
-    <div>加入我们</div>
-    <span @click=""><img src="./../assets/images/public/left.jpg" alt="" title="back"></span>
-  </header>
-  <div class="top-img" :style="background">
-    <div style="text-align: center;margin-left: .4rem;padding-top:1rem;" align="center">
-      <h2>合·作</h2>
+  <div>
+    <header align="center">
+      <div>加入我们</div>
+      <span @click=""><img src="./../assets/images/public/left.jpg" alt="" title="back"></span>
+    </header>
+    <div class="top-img" :style="background">
+      <div style="text-align: center;margin-left: .4rem;padding-top:1rem;" align="center">
+        <h2>合·作</h2>
 
-      <p style="margin: .1rem 0">我们用心合作，像相互咬合的齿轮，齐头并进，</p>
-      <p>并输予企业发展源源不断的动力。</p>
+        <p style="margin: .1rem 0">我们用心合作，像相互咬合的齿轮，齐头并进，</p>
+        <p>并输予企业发展源源不断的动力。</p>
+      </div>
     </div>
+    <div style="height: .2rem;background-color: #f5f5f5"></div>
+    <section class="">
+      <div :style="backgroundIndent" class="joinUs-title join-us">加入我们</div>
+      <hr>
+      <!--招聘信息 BEGIN-->
+      <div style="font-size: .2rem;text-align: left;" v-for="(item, $inx) in recruit">
+        <div class="keywords">
+          <div class="inline-block" :style="backgroundColors[$inx]"></div>
+          <div class=" inline-block">{{item.keywords}}/{{item.title}}</div>
+        </div>
+        <yd-accordion>
+          <yd-accordion-item class="padding-left-right" @click.native="ajax(data.id)" :title="data.title"
+                             style="text-align: left;" v-for="(data,  index) in item.workList" v-show="index<showNum ">
+            <div style="padding: .24rem;">
+              <!--<div class="font-28">{{workBrief.title}}</div>-->
+              <div style="margin-bottom:.1rem;color:#999;font-weight: bold" class="font-24 color-999 bold">职位详情:</div>
+              <div class="font-24" v-html="workBrief.content"></div>
+              <div style="color:#4FC2F8">简历邮箱：wushiyu@hoge.cn</div>
+            </div>
+          </yd-accordion-item>
+          <div class="find-more" @click="toggle($inx)" v-show="item.workList.length>4">查看更多</div>
+          <div style="height: .2rem;background-color: #f5f5f5"></div>
+        </yd-accordion>
+
+      </div>
+      <!--招聘信息 END-->
+      <!---->
+    </section>
+    <!--团队建设-->
+    <section>
+      <div :style="backgroundTeam" class="joinUs-title join-us">团队建设</div>
+      <div class="team-build" v-for="item in teams">
+        <div class="team-build-image"><img :src="item.indexpic.host+item.indexpic.dir+item.indexpic.filepath+item.indexpic.filename" alt=""></div>
+        <div class="team-build-title">{{item.title}}</div>
+        <div style="clear: both"></div>
+      </div>
+      <div class="find-more" @click="findMore()">查看更多</div>
+
+    </section>
   </div>
-  <div style="height: .2rem;background-color: #f5f5f5"></div>
-  <section class="join-us" >
-    <div :style="backgroundIndent" class="joinUs-title">加入我们</div>
-    <hr>
-    <div style="font-size: .2rem">
-    <yd-accordion >
-      <yd-accordion-item title="李白"  style="text-align: left;">
-        <div style="padding: .24rem;">
-          李白（701年－762年），字太白，号青莲居士，又号“谪仙人”，是唐代伟大的浪漫主义诗人，被后人誉为“诗仙”，与杜甫并称为“李杜”，为了与另两位诗人李商隐与杜牧即“小李杜”区别，杜甫与李白又合称“大李杜”。其人爽朗大方，爱饮酒作诗，喜交友。
-        </div>
-      </yd-accordion-item>
-      <yd-accordion-item @click.native="ajax()"  title="杜甫">
-        <div style="padding: .24rem;">
-          杜甫（712年—770年），字子美，汉族，<p >本襄阳人</p>，后徙河南巩县。自号少陵野老，唐代伟大的现实主义诗人，与李白合称“李杜”。为了与另两位诗人李商隐与杜牧即“小李杜”区别，杜甫与李白又合称“大李杜”，杜甫也常被称为“老杜”。
-        </div>
-      </yd-accordion-item>
-      <yd-accordion-item v-show="as" title="王维" :class="as?'animation_opactiy_once': ''">
-        <div style="padding: .24rem;">
-          王维（701年－761年，一说699年—761年），河东蒲州（今山西运城）人，祖籍山西祁县。唐朝著名诗人、画家，字摩诘，号摩诘居士。
-        </div>
-      </yd-accordion-item>
-    </yd-accordion>
-    </div>
-  </section>
-</div>
+
 </template>
 <script>
   export default {
     name: 'customer',
     data () {
       return {
-        as: true,
+//        recruit: [1, 2, 3],
+        recruit: [],
+        workBrief: [],
+        showNum: 4,
+        offset: 0,
+        count: 3,
+        teams: null,
         background: {
           backgroundImage: 'url(' + require('../assets/images/joinUs/1_01.jpg') + ')',
           backgroundSize: '100% 100%'
@@ -52,25 +74,116 @@
           backgroundImage: 'url(' + require('../assets/images/joinUs/join.png') + ')',
           backgroundSize: '.34rem .34rem',
           backgroundRepeat: 'no-repeat'
-        }
+        },
+        backgroundTeam: {
+          backgroundImage: 'url(' + require('../assets/images/joinUs/23_05.png') + ')',
+          backgroundSize: '.34rem .34rem',
+          backgroundRepeat: 'no-repeat'
+        },
+        backgroundColors: [
+          {
+            backgroundColor: '#E57373',
+            width: '.04rem',
+            position: 'relative',
+            top: '.04rem',
+            height: '.28rem'
+          },
+          {
+            backgroundColor: '#81C784',
+            width: '.04rem',
+            position: 'relative',
+            top: '.04rem',
+            height: '.28rem'
+          },
+          {
+            backgroundColor: '#F4D161',
+            width: '.04rem',
+            position: 'relative',
+            top: '.04rem',
+            height: '.28rem'
+          },
+          {
+            backgroundColor: '#4FC2F8',
+            width: '.04rem',
+            position: 'relative',
+            top: '.04rem',
+            height: '.28rem'
+          }
+        ]
       }
     },
     mounted () {
+      setTimeout(this.teamBuild, 1500)
+      let _this = this
       this.$http.all([
         this.$http.get('http://www.hoge.cn/m2o/pub/col.php?id=17'),
         this.$http.get('http://www.hoge.cn/m2o/pub/col.php?id=18'),
         this.$http.get('http://www.hoge.cn/m2o/pub/col.php?id=19'),
-        this.$http.get('http://www.hoge.cn/m2o/pub/col.php?id=21')
+        this.$http.get('http://www.hoge.cn/m2o/pub/col.php?id=21'),
+        this.$http.get('http://www.hoge.cn/m2o/pub/pub.php?column_id=17,18,19,21&count=1000&offset=0'),
+        this.$http.get('http://www.hoge.cn/m2o/pub/pub.php?column_id=8&count=15&offset=0')
       ])
-        .then(this.$http.spread(function (res1, res2, res3, res4) {
-          console.log('User', res1)
-          console.log('Repositories', res2)
+        .then(this.$http.spread(function (development, projectManagementCenter, businessDevelopCenter, marketOperationCenter, worksList, buildTeam) {
+          let RDC = {
+            id: development.data[0].id, title: development.data[0].title, keywords: development.data[0].keywords, workList: []
+          }
+          let BDC = {
+            id: businessDevelopCenter.data[0].id, title: businessDevelopCenter.data[0].title, keywords: businessDevelopCenter.data[0].keywords, workList: []
+          }
+          let PMC = {
+            id: projectManagementCenter.data[0].id, title: projectManagementCenter.data[0].title, keywords: projectManagementCenter.data[0].keywords, workList: []
+          }
+          let APC = {
+            id: marketOperationCenter.data[0].id, title: marketOperationCenter.data[0].title, keywords: marketOperationCenter.data[0].keywords, workList: []
+          }
+          for (let i = 0; i < worksList.data.length; i++) {
+            if (worksList.data[i].column_id === RDC.id) {
+              RDC.workList.push(worksList.data[i])
+            } else if (worksList.data[i].column_id === PMC.id) {
+              PMC.workList.push(worksList.data[i])
+            } else if (worksList.data[i].column_id === BDC.id) {
+              BDC.workList.push(worksList.data[i])
+            } else if (worksList.data[i].column_id === APC.id) {
+              APC.workList.push(worksList.data[i])
+            }
+          }
+          _this.recruit = [RDC, PMC, BDC, APC]
         }))
     },
     methods: {
-      ajax () {
-        this.as = !this.as
-        console.log('methods')
+      ajax (id) {
+        let that = this
+        this.$http.get('http://www.hoge.cn/m2o/pub/content.php?id=' + id)
+          .then(function (response) {
+            that.workBrief = response.data[0]
+            console.log(that.workBrief)
+            console.log(that.workBrief.content)
+          })
+          .catch(function (err) {
+            console.log(err)
+          })
+        console.log(id)
+      },
+      toggle (ev) {
+        this.showNum = 30
+        console.log(ev)
+      },
+      teamBuild () {
+        let that = this
+        this.$http.get('http://www.hoge.cn/m2o/pub/pub.php?column_id=8&offset' + that.offset + '&count=' + that.count)
+          .then(function (response) {
+            that.teams = response.data
+            console.log(JSON.stringify(that.teams))
+          })
+          .catch(function (err) {
+            console.log(err)
+          })
+      },
+      findMore () {
+        let findThis = this
+        findThis.offset = 3
+        findThis.count = 30
+        this.teamBuild()
       }
     }
   }
@@ -129,7 +242,11 @@
     font-size: .22rem;
   }
   .join-us{
-    padding: .3rem .24rem .24rem .24rem;
+    margin: .3rem .24rem .24rem .24rem;
+  }
+  .padding-left-right{
+    padding:0 .24rem;
+    border-top:0 solid #fff;
   }
   .joinUs-title{
     height: .34rem;
@@ -141,8 +258,56 @@
 
   }
   hr{
-    margin: 0;
-    padding: 0;
+
+    margin: .3rem .24rem .24rem .24rem;
     margin-top:.25rem;
+    border-color: #f2f2f2!important;
+    background-color:#f2f2f2!important ;
+  }
+
+  .keywords{
+    font-size: .24rem;
+    margin:.24rem;
+  }
+  .find-more{
+    text-align: center;
+    font-size: .24rem;
+    font-weight: 600;
+    padding: .25rem;
+  }
+  .inline-block{
+    display: inline-block;
+  }
+
+  .team-build:after {
+    　display:block;clear:both;content:"";visibility:hidden;height:0
+  }
+
+  .team-build{
+    zoom: 1;
+    padding:0 .51rem .3rem .24rem;
+    display: block;
+  }
+  .team-build>div{
+    display: inline-block;
+    float:left;
+
+  }
+  .team-build-image{
+      width: 2.3rem;
+      height: 1.5rem;
+    background-color: aqua;
+    }
+  .team-build-image>img{
+    width: 100%;
+    height: 100%;
+  }
+  .team-build-title{
+    font-size: .28rem;
+    height: 1.5rem;
+    white-space: normal!important;
+    word-break: break-all;
+    padding-top: .14rem;
+    margin-left: .2rem;
   }
 </style>
