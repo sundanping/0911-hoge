@@ -2,7 +2,7 @@
   <div>
     <header align="center">
       <div>加入我们</div>
-      <span @click=""><img src="./../assets/images/public/left.jpg" alt="" title="back"></span>
+      <span ><router-link to="index"><img src="./../assets/images/public/left.jpg" alt="" title="back"></router-link></span>
     </header>
     <div class="top-img" :style="background">
       <div style="text-align: center;margin-left: .4rem;padding-top:1rem;" align="center">
@@ -156,13 +156,13 @@
         this.$http.get('http://www.hoge.cn/m2o/pub/content.php?id=' + id)
           .then(function (response) {
             that.workBrief = response.data[0]
-            console.log(that.workBrief)
-            console.log(that.workBrief.content)
+//            console.log(that.workBrief)
+//            console.log(that.workBrief.content)
           })
           .catch(function (err) {
             console.log(err)
           })
-        console.log(id)
+//        console.log(id)
       },
       toggle (ev) {
         this.showNum = 30
@@ -173,7 +173,7 @@
         this.$http.get('http://www.hoge.cn/m2o/pub/pub.php?column_id=8&offset' + that.offset + '&count=' + that.count)
           .then(function (response) {
             that.teams = response.data
-            console.log(JSON.stringify(that.teams))
+//            console.log(JSON.stringify(that.teams))
           })
           .catch(function (err) {
             console.log(err)
@@ -213,7 +213,7 @@
     left: .24rem;
   }
 
-  header > span > img {
+  header > span  img {
     width: 100%;
     height: 100%;
   }
@@ -253,6 +253,7 @@
     line-height: .34rem;
     font-size: .24rem;
     color:#333;
+    font-weight: bold;
     text-indent: .43rem;
     text-align: left;
 
@@ -279,16 +280,22 @@
     display: inline-block;
   }
 
-  .team-build:after {
-    　display:block;clear:both;content:"";visibility:hidden;height:0
-  }
+  /*.team-build:after {*/
+    /*　display:block;clear:both;content:"";visibility:hidden;height:0*/
+  /*}*/
 
   .team-build{
-    zoom: 1;
-    padding:0 .51rem .3rem .24rem;
+    padding:0.2rem .51rem .1rem .24rem;
+    display: block;
+    height:2rem;
+    border-bottom: 1px solid #f2f2f2;
+  }
+  .team-build:after{
+    content: '';
+    clear: both;
     display: block;
   }
-  .team-build>div{
+  .team-build div{
     display: inline-block;
     float:left;
 
@@ -298,15 +305,16 @@
       height: 1.5rem;
     background-color: aqua;
     }
-  .team-build-image>img{
+  .team-build-image img{
     width: 100%;
     height: 100%;
   }
   .team-build-title{
     font-size: .28rem;
     height: 1.5rem;
-    white-space: normal!important;
-    word-break: break-all;
+    width: 4.2rem;
+    text-align: left;
+    white-space: normal;
     padding-top: .14rem;
     margin-left: .2rem;
   }

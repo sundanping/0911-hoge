@@ -5,7 +5,7 @@
       <div>
          商务合作
       </div>
-      <span><img src="./../assets/images/public/left.jpg" alt=""></span>
+      <span><router-link to="index"><img src="./../assets/images/public/left.jpg" alt=""></router-link></span>
     </header>
     <div class="top-img" :style="background">
       <div style="text-align: center;margin-left: .4rem;padding-top:1rem;" align="center">
@@ -74,7 +74,7 @@
     top:.26rem;
     left:.24rem;
   }
-  header>span>img{
+  header>span img{
     width: 100%;
     height: 100%;
   }

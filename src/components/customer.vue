@@ -2,7 +2,7 @@
  <div>
    <header align="center" >
      <div>行业客户</div>
-     <span><img src="./../assets/images/public/left.jpg" alt="" title="back"></span>
+     <span><router-link to="index"><img src="./../assets/images/public/left.jpg" alt="" title="back"></router-link></span>
    </header>
    <div class="top-img" :style="background">
      <div style="text-align: center;margin-left: .4rem;padding-top:1rem;" align="center">
@@ -15,35 +15,42 @@
   <div style="height: .2rem;background-color: #f5f5f5"></div>
    <section class="classic-customer">
      <div class="classic-customer-title">
-       <div :style="backgroundClassicCustomer " class="">经典客户</div>
-       <div :style="backgroundArrow">换一批</div>
+       <div :style="backgroundClassicCustomer " class="customer-title">经典客户</div>
+       <div  @click="changeClassicCustomer()" :style="backgroundArrow">换一批</div>
      </div>
      <div class="classic-customer-message ">
        <!--v-for-->
-        <div class="classic-customer-message-logo ">
-          <div class="classic-customer-message-logo-first"></div>
-          <h1 class="classic-customer-message-logo-second">济南广播电视台</h1>
+        <div class="classic-customer-message-logo " v-for="item in classicCustromer">
+          <div class="classic-customer-message-logo-first">
+            <img style="width: .8rem;height:.8rem" :src="item.indexpic.host+item.indexpic.dir+item.indexpic.filepath+item.indexpic.filename || 'http://img1.hoge.cn/material/news/img/220x/2017/07/20170719170533nuYs.png' " alt=""></div>
+          <h1 class="classic-customer-message-logo-second">{{item.title }}</h1>
+
           <div class="classic-customer-message-logo-last">了解详情</div>
         </div>
-       <div class="classic-customer-message-logo ">
-         <div class="classic-customer-message-logo-first"></div>
-         <h1 class="classic-customer-message-logo-second">d</h1>
-         <div class="classic-customer-message-logo-last">d</div>
-       </div>
-       <div class="classic-customer-message-logo ">
-       <div class="classic-customer-message-logo-first"></div>
-       <h1 class="classic-customer-message-logo-second">d</h1>
-       <div class="classic-customer-message-logo-last">d</div>
-     </div>
      </div>
    </section>
    <!--line-->
    <div style="height: .2rem;background-color: #f5f5f5"></div>
    <section class="classic-customer">
      <div class="classic-customer-title">
-       <div :style="backgroundCustomer " class="">行业客户</div>
-       <div :style="backgroundArrow">换一批</div>
+       <div :style="backgroundCustomer " class="customer-title">行业客户</div>
+       <div @click="changeMediaCustomer('government')" :style="backgroundArrow">换一批</div>
      </div>
+     <div class="media-government">
+       <div @click="choiceCustomer('media')" :class="choiced==='media'?'choice-customer' : ''">媒体行业</div>
+       <div @click="choiceCustomer('government')" :class="choiced==='government'?'choice-customer' : ''">政府/企业</div>
+     </div>
+     <!--logo-->
+     <div class="choice-customer-logo" v-for="item in customerInformation">
+       <div class="repeat-customer">
+         <div style=""><img style="width: .9rem;height: .9rem;border-radius: 50%" :src="item.indexpic.host+item.indexpic.dir+item.indexpic.filepath+item.indexpic.filename"  alt=""></div>
+        <div style="margin-bottom: 0;overflow: hidden">{{item.title}}</div>
+       </div>
+     </div>
+
+      <div>
+
+      </div>
    </section>
 
  </div>
@@ -53,6 +60,14 @@
     name: 'customer',
     data () {
       return {
+        column_id: 10,
+        count: 4,
+        offset: 0,
+        choiced: 'media',
+        classicCustromer: [],
+        mediaCustomerList: [],
+        governmentCustomer: [],
+        customerInformation: [],
         backgroundClassicCustomer: {
           backgroundImage: 'url(' + require('../assets/images/customer/1_03.png') + ')',
           backgroundRepeat: 'no-repeat',
@@ -70,8 +85,75 @@
           backgroundSize: '.18rem .34rem'
         },
         background: {
-          backgroundImage: 'url(' + require('../assets/images/company-introduce/9_02.png') + ')',
+          backgroundImage: 'url(' + require('../assets/images/customer/cuntromer.jpg') + ')',
           backgroundSize: '100% 100%'
+        }
+      }
+    },
+    mounted () {
+      let $$this = this
+      this.$http.all([
+        this.$http.get('http://www.hoge.cn/m2o/pub/pub.php?column_id=10&count=4&offset=0'),
+        this.$http.get('http://www.hoge.cn/m2o/pub/pub.php?column_id=11&count=8&offset=0'),
+        this.$http.get('http://www.hoge.cn/m2o/pub/pub.php?column_id=12&count=8&offset=0')
+      ])
+        .then(this.$http.spread(function (classic, media, government) {
+          $$this.classicCustromer = classic.data
+          $$this.mediaCustromerList = media.data
+          $$this.customerInformation = media.data
+          $$this.governmentCustromer = government.data
+          console.log($$this.classicCustromer)
+        })).catch(function (err) {
+          console.log(err)
+        })
+    },
+    methods: {
+      sendAjax (id, _count, _offset) {
+        let _that = this
+        console.log(id)
+        console.log(_offset)
+        this.$http.get('http://www.hoge.cn/m2o/pub/pub.php?column_id=' + id + '&count=' + _count + '&offset=' + _offset)
+          .then(function (response) {
+            if (id === 10 && response.data.length > 0) {
+              _that.classicCustromer = response.data
+            } else if (id === 10 && response.data.length === 0) {
+              _that.offset = -4
+            } else if (id === 11 && response.data.length > 0) {
+              _that.customerInformation = response.data
+            } else if (id === 11 && response.data.length === 0) {
+              _that.offset = -8
+            } else if (id === 12 && response.data.length > 0) {
+              _that.customerInformation = response.data
+            } else if (id === 12 && response.data.length === 0) {
+              _that.offset = -8
+            }
+          })
+          .catch(function (err) {
+            console.log(err)
+          })
+      },
+//      经典客户点击换一批
+      changeClassicCustomer () {
+        this.offset += 4
+        this.count = 4
+        this.sendAjax(10, this.count, this.offset)
+      },
+      choiceCustomer (name) {
+        if (name === 'media') {
+          this.choiced = 'media'
+          this.customerInformation = this.mediaCustromerList
+        } else if (name === 'government') {
+          this.choiced = 'government'
+          this.customerInformation = this.governmentCustromer
+        }
+      },
+      changeMediaCustomer () {
+        if (this.choiced === 'media') {
+          this.offset += 8
+          this.sendAjax(11, 8, this.offset)
+        } else if (this.choiced === 'government') {
+          this.offset += 8
+          this.sendAjax(12, 8, this.offset)
         }
       }
     }
@@ -103,7 +185,7 @@
     left: .24rem;
   }
 
-  header > span > img {
+  header > span   img {
     width: 100%;
     height: 100%;
   }
@@ -165,6 +247,11 @@
     height:2.18rem;
   }
   /*border*/
+  .customer-title{
+    font-size: .24rem;
+    color:#333;
+    font-weight: 600;
+  }
   .classic-customer-message>div:nth-child(n+3){
     border-top:1px solid #999 ;
   }
@@ -179,10 +266,12 @@
     height: .8rem;
   }
   .classic-customer-message-logo>.classic-customer-message-logo-second{
-    height: .28rem;
+    height: .36rem;
     font-size: .28rem;
     margin:.2rem;
     font-weight: bold;
+    overflow: hidden;
+    white-space: nowrap;
   }
   .classic-customer-message-logo>.classic-customer-message-logo-last{
     height: .4rem;
@@ -193,4 +282,33 @@
     line-height: .4rem;
     border: 1px solid #4EC3F9;
   }
+  .media-government{
+    font-size: .24rem;
+    margin-bottom: .36rem;
+  }
+  .media-government:after{
+    content: '';
+    clear: both;
+    display: block;
+  }
+  .media-government>div{
+    display: inline-block;
+  }
+  .media-government>div:first-child{
+    margin-right: .6rem;
+  }
+  .choice-customer{
+    padding:.07rem .19rem;
+    border-radius: .24rem;
+    background-color: #4EC3F9;
+    color:#fff;
+  }
+  .choice-customer-logo>div{
+    float:left
+  }
+  .repeat-customer{
+    width: 25%;
+    height: 1.34rem;
+    font-size: .22rem;
+    margin-bottom: .28rem}
 </style>

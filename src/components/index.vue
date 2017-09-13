@@ -131,7 +131,22 @@
         </div>
      </div>
     </div>
-
+    <div class="line"></div>
+    <!--公司资讯-->
+    <section class="company-information">
+      <div :style="backgroundCompanyInformation" class="company-information-title">公司资讯</div>
+      <!--information-list-->
+      <div class="information-list" v-for="item in informationList">
+        <!--img-->
+        <div class="information-img"><img :src="item.indexpic.host+item.indexpic.dir+item.indexpic.filepath+item.indexpic.filename" alt=""></div>
+        <div class="information-title-time">
+          <!--title & time-->
+          <div>{{item.title}}</div>
+          <div>{{item.create_time}}</div>
+        </div>
+      </div>
+      <div class="load-more" @click="getInformation">加载更多</div>
+    </section>
   </div>
 
 
@@ -145,17 +160,47 @@
     data () {
       return {
         msg: '厚建',
+        count: 3,
+        offset: 0,
+        informationList: [],
         background: {
           marginBottom: '.2rem',
           backgroundImage: 'url(' + require('../assets/images/index/logo.png') + ')',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
           backgroundSize: '1.6rem .5rem'
-//          backgroundPosize: '40px 20px'
+        },
+        backgroundCompanyInformation: {
+          backgroundImage: 'url(' + require('../assets/images/index/f_03.png') + ')',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: '.34rem .34rem'
+
         }
+      }
+    },
+    mounted () {
+      this.getInformation()
+    },
+    methods: {
+      getInformation () {
+        let that = this
+        this.$http.get('http://www.hoge.cn/m2o/pub/pub.php?column_id=1&count=' + this.count + '&offset=' + this.offset)
+          .then(function (response) {
+            that.count += 3
+            that.offset = 0
+            that.informationList.length = 0
+//            Array.prototype.push.apply(that.informationList, response.data)
+            that.informationList = response.data
+            console.log(JSON.parse(JSON.stringify(that.informationList)))
+            console.log(that.count)
+          })
+          .catch(function (err) {
+            console.log(err)
+          })
       }
     }
   }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -367,4 +412,56 @@
   .media>section >div:first-child{
 
   }
+  .company-information{
+    padding: .3rem 0 0 .24rem;
+  }
+  .company-information-title{
+    font-size: .24rem;
+    color:#333;
+    text-indent:.43rem ;
+    height: .34rem;
+    line-height: .34rem;
+    text-align: left;
+   font-family: ' FZLTHK--GBK1-0';
+  }
+  .information-list{
+    height: 1.5rem;
+    display: block;
+    padding-bottom: 1.8rem;
+    /**/
+    margin-top:.3rem;
+    border-bottom: 2px solid #e6e6e6;
+  }
+  .information-list:after{
+    content: '';
+    clear: both;
+    display: block;
+  }
+  .information-list>div{
+    float: left;
+  }
+  .information-img{
+    width: 2.3rem;
+    height: 1.5rem;
+    margin-right:.2rem;
+  }
+  .information-img>img{
+    width: 100%;
+    height: 100%;
+  }
+  .information-title-time{
+    padding-top: .14rem;
+    font-size: .28rem;
+    overflow: hidden;
+    width: 4.3rem;
+    word-spacing: normal;
+    text-align: left;
+  }
+  .information-title-time>div:first-child{
+    padding-bottom: .18rem;
+  }
+  .load-more{
+    font-size: .28rem;
+    margin:.25rem;
+    color:#333}
 </style>
