@@ -29,7 +29,7 @@
               <!--<div class="font-28">{{workBrief.title}}</div>-->
               <div style="margin-bottom:.1rem;color:#999;font-weight: bold" class="font-24 color-999 bold">职位详情:</div>
               <div class="font-24" v-html="workBrief.content"></div>
-              <div style="color:#4FC2F8">简历邮箱：wushiyu@hoge.cn</div>
+              <div style="color:#4FC2F8"><a style="color:#4FC2F8" href="mailto:wushiyu@hoge.cn">简历邮箱：wushiyu@hoge.cn</a></div>
             </div>
           </yd-accordion-item>
           <div class="find-more" @click="toggle($inx)" v-show="item.workList.length>4">查看更多</div>
@@ -48,7 +48,7 @@
         <div class="team-build-title">{{item.title}}</div>
         <div style="clear: both"></div>
       </div>
-      <div class="find-more" @click="findMore()">查看更多</div>
+      <div class="find-more" @click="findMore()">{{moreMessage}}</div>
 
     </section>
   </div>
@@ -65,6 +65,7 @@
         showNum: 4,
         offset: 0,
         count: 3,
+        moreMessage: '查看更多',
         teams: null,
         background: {
           backgroundImage: 'url(' + require('../assets/images/joinUs/1_01.jpg') + ')',
@@ -173,16 +174,16 @@
         this.$http.get('http://www.hoge.cn/m2o/pub/pub.php?column_id=8&offset' + that.offset + '&count=' + that.count)
           .then(function (response) {
             that.teams = response.data
-//            console.log(JSON.stringify(that.teams))
+            console.log(JSON.stringify(that.teams))
           })
           .catch(function (err) {
             console.log(err)
           })
       },
       findMore () {
-        let findThis = this
-        findThis.offset = 3
-        findThis.count = 30
+        this.offset += 3
+        this.count = 30
+        this.offset >= 3 ? this.moreMessage = 'Duang 到底了' : '加载更多'
         this.teamBuild()
       }
     }
@@ -273,7 +274,6 @@
   .find-more{
     text-align: center;
     font-size: .24rem;
-    font-weight: 600;
     padding: .25rem;
   }
   .inline-block{

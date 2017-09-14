@@ -5,7 +5,7 @@ import joinUs from '@/components/joinUs'
 import company from '@/components/company'
 import customer from '@/components/customer'
 import cooperation from '@/components/cooperation'
-
+import details from '@/components/details'
 Vue.use(Router)
 export default new Router({
   routes: [
@@ -36,6 +36,11 @@ export default new Router({
       path: '/customer',
       name: 'customer',
       component: customer
+    },
+    {
+      path: '/details',
+      name: 'details',
+      component: details
     }
   ]
 })

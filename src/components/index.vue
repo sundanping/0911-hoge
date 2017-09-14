@@ -137,6 +137,7 @@
       <div :style="backgroundCompanyInformation" class="company-information-title">公司资讯</div>
       <!--information-list-->
       <div class="information-list" v-for="item in informationList">
+        <router-link :to="{path:'/details',query: {name: JSON.stringify(item)}}">
         <!--img-->
         <div class="information-img"><img :src="item.indexpic.host+item.indexpic.dir+item.indexpic.filepath+item.indexpic.filename" alt=""></div>
         <div class="information-title-time">
@@ -144,6 +145,7 @@
           <div>{{item.title}}</div>
           <div>{{item.create_time}}</div>
         </div>
+        </router-link>
       </div>
       <div class="load-more" @click="getInformation">加载更多</div>
     </section>
@@ -370,10 +372,7 @@
     padding:0;
     margin:0;
     border-radius: .06rem;
-
-
   }
-
   .media{
     margin-left:.2rem;
     width: 90%;
@@ -437,7 +436,7 @@
     clear: both;
     display: block;
   }
-  .information-list>div{
+  .information-list div{
     float: left;
   }
   .information-img{

@@ -71,7 +71,7 @@
           <div>2016年广播电视科技创新产品奖</div>
           <div>
             <h1 style="font-size: .3rem;color:#E57373 ;">特点:</h1>
-            <p style="overflow: auto;font-size:.22rem;white-space: nowrap;font-size:.2rem!important;"> 创新产品、创新项目、创新技术</p>
+            <p  style="overflow: auto;font-size:.22rem;white-space: nowrap;font-size:.2rem!important;text-overflow: ellipsis"> 创新产品、创新项目、创新技术</p>
           </div>
         </div>
       </div>
@@ -341,7 +341,7 @@
     height: 5.6rem;
     background-color: #717171;
     left: 1.15rem;
-    top: 9.7rem;
+    top: 10.1rem;
 
   }
 
@@ -352,19 +352,19 @@
     border: 2px solid #929292;
     box-shadow: 0 0 1px #f4f5ff;
     background-color: #f3f4f5;
-    border-radius: .13rem;
+    border-radius: 50%;
     position: relative;
     display: inline-block;
     z-index: 999;
   }
   .circle >div{
-    box-shadow: inset 0px 0px 22px #f3f4f5;
+    /*box-shadow: inset 0px 0px 22px #f3f4f5;*/
     width: .2rem;
     height: .2rem;
     border: 2px solid #f3f4f5;
     box-shadow: 0 0 1px #f4f5ff;
     background-color: #4FC2F8;
-    border-radius: .2rem;
+    border-radius: 50%;
     position: relative;
     top:-.06rem;
     left:-.01rem;
@@ -387,6 +387,8 @@
     background-color: aqua;
   }
   .prize-message-title{
+    width: 3.8rem;
+    overflow: hidden;
     padding-left: .2rem;
   }
   .prize-message-title>div:first-child{
